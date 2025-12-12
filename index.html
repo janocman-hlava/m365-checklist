@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS365 Měsíční Checklist</title>
+    <style>
+        :root {
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-red-500: rgba(192, 21, 47, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-orange-500: rgba(168, 75, 47, 1);
+            --color-success: var(--color-teal-500);
+            --color-error: var(--color-red-500);
+            --color-warning: var(--color-orange-500);
+            --color-bg-primary: var(--color-cream-50);
+            --color-text-primary: var(--color-slate-900);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --focus-ring: 0 0 0 3px rgba(33, 128, 141, 0.4);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-bg-primary: var(--color-charcoal-700);
+                --color-text-primary: var(--color-gray-200);
+                --color-primary: var(--color-teal-300);
+                --color-primary-hover: var(--color-teal-400);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: var(--color-primary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .info-badge {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--color-gray-200);
+            color: var(--color-slate-900);
+            border: 1px solid var(--color-gray-400);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--color-gray-300);
+        }
+
+        .btn-danger {
+            background-color: var(--color-red-500);
+            color: var(--color-white);
+        }
+
+        .btn-danger:hover {
+            background-color: #c41530;
+        }
+
+        .btn:focus-visible {
+            outline: none;
+            box-shadow: var(--focus-ring);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--color-white);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--color-primary);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .stat-card {
+                background: var(--color-charcoal-800);
+            }
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--color-slate-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+
+        .stat-meta {
+            font-size: 11px;
+            color: var(--color-slate-500);
+            margin-top: 8px;
+        }
+
+        .section {
+            background: var(--color-white);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .section {
+                background: var(--color-charcoal-800);
+            }
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+            color: var(--color-white);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-icon {
+            font-size: 18px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--color-white);
+            transition: width 0.3s ease;
+        }
+
+        .section-content {
+            padding: 0;
+        }
+
+        .checklist-item {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--color-gray-200);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .checklist-item {
+                border-bottom-color: var(--color-charcoal-700);
+            }
+
+            .checklist-item:hover {
+                background-color: rgba(50, 184, 198, 0.05);
+            }
+        }
+
+        .checklist-item:hover {
+            background-color: rgba(33, 128, 141, 0.05);
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-item.completed {
+            background-color: rgba(33, 128, 141, 0.08);
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            margin-top: 2px;
+            accent-color: var(--color-primary);
+            cursor: pointer;
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        .item-title {
+            font-weight: 500;
+            font-size: 14px;
+            margin: 0 0 4px 0;
+            color: var(--color-text-primary);
+        }
+
+        .item-description {
+            font-size: 12px;
+            color: var(--color-slate-500);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .item-note {
+            font-size: 11px;
+            color: var(--color-orange-500);
+            margin-top: 6px;
+            padding: 6px 8px;
+            background-color: rgba(230, 129, 97, 0.08);
+            border-left: 2px solid var(--color-orange-500);
+            border-radius: 2px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--color-slate-500);
+            font-size: 12px;
+            border-top: 1px solid var(--color-gray-200);
+            margin-top: 40px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .footer {
+                border-top-color: var(--color-charcoal-700);
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--color-white);
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .modal-content {
+                background: var(--color-charcoal-800);
+            }
+        }
+
+        .modal-header {
+            margin: 0 0 20px 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--color-slate-500);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>🔐 MS365 Měsíční Audit</h1>
+                <p style="margin: 8px 0 0 0; font-size: 13px; color: var(--color-slate-500);">Business Standard Tenant Health Check</p>
+            </div>
+            <div class="header-actions">
+                <span class="info-badge" id="monthBadge">Prosinec 2025</span>
+                <button class="btn btn-secondary" onclick="exportChecklist()">📥 Export</button>
+                <button class="btn btn-secondary" onclick="resetMonth()">🔄 Reset měsíc</button>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-label">Celkový Pokrok</div>
+                <div class="stat-value" id="progressPercent">0%</div>
+                <div style="width: 100%; background: var(--color-gray-200); height: 4px; border-radius: 2px; margin-top: 12px; overflow: hidden;">
+                    <div id="progressFill" style="height: 100%; background: var(--color-primary); width: 0%; transition: width 0.3s;"></div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Splněno / Celkem</div>
+                <div class="stat-value" id="completedCount">0/0</div>
+                <div class="stat-meta" id="lastCompleted">Ještě nezačato</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Zbývá položek</div>
+                <div class="stat-value" id="remainingCount">0</div>
+                <div class="stat-meta">K dokončení tohoto měsíce</div>
+            </div>
+        </div>
+
+        <!-- 1. Identita a Přístupy -->
+        <div class="section">
+            <div class="section-header">
+                <h2><span class="section-icon">👤</span>1. Identita a Přístupy</h2>
+                <div class="progress-bar" style="width: 150px;">
+                    <div class="progress-fill" id="progress-1" style="width: 0%;"></div>
+                </div>
+            </div>
+            <div class="section-content" id="section-1"></div>
+        </div>
+
+        <!-- 2. Exchange Online -->
+        <div class="section">
+            <div class="section-header">
+                <h2><span class="section-icon">📧</span>2. Exchange Online</h2>
+                <div class="progress-bar" style="width: 150px;">
+                    <div class="progress-fill" id="progress-2" style="width: 0%;"></div>
+                </div>
+            </div>
+            <div class="section-content" id="section-2"></div>
+        </div>
+
+        <!-- 3. SharePoint a OneDrive -->
+        <div class="section">
+            <div class="section-header">
+                <h2><span class="section-icon">☁️</span>3. SharePoint a OneDrive</h2>
+                <div class="progress-bar" style="width: 150px;">
+                    <div class="progress-fill" id="progress-3" style="width: 0%;"></div>
+                </div>
+            </div>
+            <div class="section-content" id="section-3"></div>
+        </div>
+
+        <!-- 4. Auditní Logy a Rizika -->
+        <div class="section">
+            <div class="section-header">
+                <h2><span class="section-icon">🔍</span>4. Auditní Logy a Rizika</h2>
+                <div class="progress-bar" style="width: 150px;">
+                    <div class="progress-fill" id="progress-4" style="width: 0%;"></div>
+                </div>
+            </div>
+            <div class="section-content" id="section-4"></div>
+        </div>
+
+        <!-- 5. Licenční Hygiena -->
+        <div class="section">
+            <div class="section-header">
+                <h2><span class="section-icon">💳</span>5. Licenční Hygiena</h2>
+                <div class="progress-bar" style="width: 150px;">
+                    <div class="progress-fill" id="progress-5" style="width: 0%;"></div>
+                </div>
+            </div>
+            <div class="section-content" id="section-5"></div>
+        </div>
+
+        <div class="footer">
+            <p>💡 Tip: Pravidelná měsíční kontrola je klíčem k bezpečnosti Business Standard tenantu. Automatizuj co se dá, ale zkontroluj všechno ručně.</p>
+            <p style="margin-top: 10px; font-size: 11px;">© 2025 MS365 Admin Tools | Poslední aktualizace: <span id="lastUpdate">Nikdy</span></p>
+        </div>
+    </div>
+
+    <div class="modal" id="resetModal">
+        <div class="modal-content">
+            <h3 class="modal-header">Resetovat měsíc?</h3>
+            <div class="modal-body">
+                Opravdu chceš resetovat checklist pro nový měsíc? Všechny zaškrtnuté položky budou vymazány.
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeResetModal()">Zrušit</button>
+                <button class="btn btn-danger" onclick="confirmReset()">Resetovat</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const checklistData = {
+            1: [
+                { title: "Ověření Global Adminů", description: "Max. 2-4 uživatelů s rolí GA (včetně break-glass)", note: "Hledej nevyžádané GA v Entra ID > Roles" },
+                { title: "MFA Status - Report", description: "Ověř, že všichni aktivní uživatelé mají MFA zapnutu", note: "⚠️ Business Standard = bez Conditional Access" },
+                { title: "Break-Glass Účet", description: "Ověř, že nouzový účet existuje a není kompromitován", note: "Zkontroluj sign-in logy" },
+                { title: "Sign-in Logs - Anomálie", description: "Skenuj neúspěšná přihlášení a podezřelá geo-lokace", note: "Brute-force útoky jsou časté v malých firmách" }
+            ],
+            2: [
+                { title: "Auto-forwarded Messages Report", description: "KRITICKÉ: Zkontroluj pravidla pro přeposílání pošty ven", note: "Spusť v Admin Center > Reports > Mail flow" },
+                { title: "Kontrola Quarantiny", description: "Přezkoumat false positives a podezřelé schránky", note: "EOP (Exchange Online Protection) může blokovat legitimní maily" },
+                { title: "Transport Rules Audit", description: "Ověř, že nikdo nepřidal BCC pravidlo na externí účty", note: "Hledej neznámá pravidla v Mail Flow" },
+                { title: "SPF/DKIM/DMARC Status", description: "Kontrola authentication recordů tvé domény", note: "Zajistit, aby se doména nepoužívala ke spoofingu" }
+            ],
+            3: [
+                { title: "Storage Limit Check", description: "Zkontroluj využitý prostor (limit: 1TB + 10GB/licenci)", note: "Malé firmy rychle narážejí na limit" },
+                { title: "Externí Sdílení - Anonymous Links", description: "Audit 'Anyone with link' hesel - expirují?", note: "Doporučení: nastavit expiraci na 30 dní" },
+                { title: "OneDrive Storage", description: "Hledej nevyužívané nebo mrtvé OneDrivy uživatelů", note: "Archivuj nebo smaž po ofboardingu" },
+                { title: "Sharing Policies", description: "Ověř, zda jsou citlivé databooks sdíleny správně", note: "Hledej HR/Finance databooks sdílené veřejně" }
+            ],
+            4: [
+                { title: "Audit Log: New-InboxRule", description: "Hledej vytvoření nových pravidel - indikátor útoku", note: "Útočníci často vytvoří pravidla po prolomení hesla" },
+                { title: "Audit Log: Add-MailboxPermission", description: "Kdo přidal práva k cizím schránkám?", note: "Insider hrozba nebo kompromitace GA" },
+                { title: "Audit Log: FileDeleted", description: "Hromadné mazání souborů - ransomware aktivita?", note: "Vzácnější na SharePointu, časté na desktopech" },
+                { title: "Enterprise Apps - Consent Grants", description: "Podezřelé aplikace se souhlasy na 'Read all mail'?", note: "Illicit Consent Grant attack - moderní phishing" }
+            ],
+            5: [
+                { title: "Nepřiřazené Licence", description: "Kolik licencí je koupeno ale nepoužívá se?", note: "Přispívá k nákladům bez zisku" },
+                { title: "Neaktivní Uživatelé", description: "Odstraň nebo deaktivuj mrtvé účty (>90 dní bez loginu)", note: "Bezpečnostní riziko - snadno kompromitovatelné" },
+                { title: "Guest Users Audit", description: "Kontrola externích uživatelů - jsou všechny potřebné?", note: "Hledej guest accounts, které se nepoužívají" },
+                { title: "Business Standard Upgrade?", description: "Je potřeba přejít na Premium kvůli bezpečnosti?", note: "Ransomware/Intune/Defender obavy = upgrade" }
+            ]
+        };
+
+        let state = {};
+        const currentMonth = new Date().toLocaleString('cs-CZ', { month: 'long', year: 'numeric' }).charAt(0).toUpperCase() + new Date().toLocaleString('cs-CZ', { month: 'long', year: 'numeric' }).slice(1);
+
+        function initApp() {
+            loadState();
+            renderSections();
+            updateStats();
+            updateMonthBadge();
+            updateLastUpdate();
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem(`m365-checklist-${new Date().getMonth()}-${new Date().getFullYear()}`);
+            if (saved) {
+                state = JSON.parse(saved);
+            } else {
+                Object.keys(checklistData).forEach(section => {
+                    state[section] = checklistData[section].map(() => false);
+                });
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem(`m365-checklist-${new Date().getMonth()}-${new Date().getFullYear()}`, JSON.stringify(state));
+            updateLastUpdate();
+        }
+
+        function renderSections() {
+            Object.keys(checklistData).forEach(section => {
+                const container = document.getElementById(`section-${section}`);
+                container.innerHTML = checklistData[section].map((item, idx) => `
+                    <div class="checklist-item ${state[section][idx] ? 'completed' : ''}">
+                        <input type="checkbox" class="checkbox" ${state[section][idx] ? 'checked' : ''} onchange="toggleItem(${section}, ${idx})">
+                        <div class="item-content">
+                            <p class="item-title">${item.title}</p>
+                            <p class="item-description">${item.description}</p>
+                            ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            });
+        }
+
+        function toggleItem(section, index) {
+            state[section][index] = !state[section][index];
+            saveState();
+            renderSections();
+            updateStats();
+        }
+
+        function updateStats() {
+            let total = 0, completed = 0;
+            Object.keys(checklistData).forEach(section => {
+                total += checklistData[section].length;
+                completed += state[section].filter(x => x).length;
+            });
+
+            const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('completedCount').textContent = `${completed}/${total}`;
+            document.getElementById('remainingCount').textContent = total - completed;
+            document.getElementById('progressFill').style.width = percent + '%';
+
+            // Update section progress bars
+            Object.keys(checklistData).forEach(section => {
+                const sectionTotal = checklistData[section].length;
+                const sectionCompleted = state[section].filter(x => x).length;
+                const sectionPercent = sectionTotal > 0 ? (sectionCompleted / sectionTotal) * 100 : 0;
+                document.getElementById(`progress-${section}`).style.width = sectionPercent + '%';
+            });
+
+            if (completed > 0) {
+                document.getElementById('lastCompleted').textContent = `Poslední aktualizace dnes`;
+            }
+        }
+
+        function updateMonthBadge() {
+            const now = new Date();
+            const monthName = now.toLocaleString('cs-CZ', { month: 'long' }).charAt(0).toUpperCase() + now.toLocaleString('cs-CZ', { month: 'long' }).slice(1);
+            const year = now.getFullYear();
+            document.getElementById('monthBadge').textContent = `${monthName} ${year}`;
+        }
+
+        function updateLastUpdate() {
+            const saved = localStorage.getItem(`m365-checklist-${new Date().getMonth()}-${new Date().getFullYear()}`);
+            if (saved) {
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleDateString('cs-CZ');
+            }
+        }
+
+        function exportChecklist() {
+            let csv = 'Sekce,Položka,Popis,Splněno\n';
+            const sectionNames = {
+                1: 'Identita a Přístupy',
+                2: 'Exchange Online',
+                3: 'SharePoint a OneDrive',
+                4: 'Auditní Logy a Rizika',
+                5: 'Licenční Hygiena'
+            };
+
+            Object.keys(checklistData).forEach(section => {
+                checklistData[section].forEach((item, idx) => {
+                    const status = state[section][idx] ? 'ANO' : 'NE';
+                    const title = item.title.replace(/,/g, ' ');
+                    const desc = item.description.replace(/,/g, ' ');
+                    csv += `${sectionNames[section]},${title},${desc},${status}\n`;
+                });
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.download = `MS365-Checklist-${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        function resetMonth() {
+            document.getElementById('resetModal').classList.add('active');
+        }
+
+        function closeResetModal() {
+            document.getElementById('resetModal').classList.remove('active');
+        }
+
+        function confirmReset() {
+            Object.keys(checklistData).forEach(section => {
+                state[section] = checklistData[section].map(() => false);
+            });
+            saveState();
+            renderSections();
+            updateStats();
+            closeResetModal();
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
